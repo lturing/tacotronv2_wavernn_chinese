@@ -29,7 +29,8 @@ fmin = 95
 outputs_per_step = 1 # outputs_per_step越大，收敛越快(attention 对齐)，但效果有一定程度变差
 predict_linear = False # 
 ```
-同时，由于GTX 1060 6G的gpu的限制，拼音embedding size，encoder 和 decoder中的lstm的单元数有所减少，具体参数参看
+同时，由于GTX 1060 6G的gpu的限制，拼音embedding size，encoder 和 decoder中的lstm的单元数有所减少，具体参数参看 
+
 执行如下脚本，生成TacotronV2的训练数据集
 > python preprocess.py
 
