@@ -53,4 +53,6 @@ predict_linear = False #
 
 
 
- 
+## 3 speaker adaptive
+参照代码[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，在finetune阶段，固定decoder层前的所有层的参数(embedding层、CHBG、encoder层等)，用少量的新数据集训练从checkpoint中恢复的模型，达到speaker adpative的目的。
+
