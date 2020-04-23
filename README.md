@@ -1,6 +1,6 @@
 # tacotronv2_wavernn_chinese
 1. 利用开源中文语音数据集[标贝](https://www.data-baker.com/open_source.html)(女声)，训练中文[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)，实现拼音输入序列到声学特征(Mel)转换的声学模型。在GTA模式下，利用训练好的TacotronV2合成标贝语音数据集中中文对应的Mel特征，作为声码器[WaveRNN](https://github.com/fatchord/WaveRNN)的训练数据。在合成阶段，利用TactornV2和WaveRNN合成高质量、高自然度的中文语音。
-2. 从[THCHS-30](http://www.openslr.org/18/)任选一个speaker，finetune TacotronV2中的部分参数，实现speaker　adaptive。
+2. 从[THCHS-30](http://www.openslr.org/18/)任选一个speaker，finetune TacotronV2中的部分参数，实现speaker adaptive。
 
 ## 1 训练中文Tacotron V2
 
@@ -33,6 +33,19 @@ predict_linear = False #
 执行如下脚本，生成TacotronV2的训练数据集
 > python preprocess.py
 
-### 1.2 训练模型
+### 1.2 训练TacotronV2模型
+执行如下脚本，训练TacotronV2模型
+> python train.py --model='Tacotron-2'
+
+### 1.3 合成语音
+修改脚本 generate_mel_by_gta_for_tested_text.py 中text，执行如下脚本，合成语音
+> python generate_mel_by_gta_for_tested_text.py
+
+### 1.4 改进部分
+1 采用gmm-attention 实现长句子(字数大于2000)的语音合成效果
+
+##　2 训练WaveRNN模型
+### 2.1 训练数据集准备
+
 
  
