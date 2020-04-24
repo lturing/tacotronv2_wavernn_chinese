@@ -1,7 +1,7 @@
 # TacotronV2(gmm-attention) + WaveRNN
 1. 利用开源中文语音数据集[标贝](https://www.data-baker.com/open_source.html)(女声)，训练中文[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)，实现拼音输入序列到声学特征(Mel)转换的声学模型。在GTA模式下，利用训练好的TacotronV2合成标贝语音数据集中中文对应的Mel特征，作为声码器[WaveRNN](https://github.com/fatchord/WaveRNN)的训练数据。在合成阶段，利用TactornV2和WaveRNN合成高质量、高自然度的中文语音。
 2. 从[THCHS-30](http://www.openslr.org/18/)任选一个speaker，finetune TacotronV2中的部分参数，实现speaker adaptive。
-3. 利用Tensorflow serving + Tornado 部署TacotronV2中文语音合成服务
+3. 利用Tensorflow serving + Tornado 部署TacotronV2中文语音合成服务。
 
 ## 1 训练中文Tacotron V2
 
@@ -57,3 +57,7 @@ predict_linear = False #
 ## 3 speaker adaptive
 参照代码[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，在finetune阶段，固定decoder层前的所有层的参数(embedding层、CHBG、encoder层等)，用少量的新数据集训练从checkpoint中恢复的模型，达到speaker adpative的目的。
 
+
+
+##　额外参照文献
+- [location-relative attention mechanisms for robust long-form speech synthesis](https://arxiv.org/pdf/1910.10288)
