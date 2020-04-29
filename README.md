@@ -45,7 +45,7 @@ predict_linear = False #
 
 ### 1.4 改进部分
 * 由于[TacotornV2]()中采用的注意力机制是Location sensitive attention，对长句子的建模能力不太好，分别尝试了以下三种注意力机制：
-    * 采用GMM attention 实现长句子(字数大于2000)的语音合成效果
+    * 采用GMM attention(三种形式)
     * Discretized Graves attention(GMM attention的变种)
     * Forward attention
 
@@ -64,11 +64,8 @@ predict_linear = False #
 参照代码[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，在finetune阶段，固定decoder层前的所有层的参数(embedding层、CHBG、encoder层等)，用少量的新数据集训练从checkpoint中恢复的模型，达到speaker adpative的目的。
 
 ## 4 服务部署
-采用Tensorflow Serving + Docker 来部署训练好的TacotronV2语音服务，由于需要对文本进行处理，还搭建了Flask后台框架，最终的语音合成的请求过程如下：　　
+采用Tensorflow Serving + Docker 来部署训练好的TacotronV2语音服务，由于需要对文本进行处理，还搭建了Flask后台框架，最终的语音合成的请求过程如下：       
 客户端或页面将需要合成语音的文字通过Get或Post方式发送请求 -> Flask后天接受请求中的文本，并对其处理，按照指定的格式发送给Docker中的Tensorflow Serving服务 -> Tensorflow Serving合成语音，并将语音文件发送给Flask -> Flask收到语音文件(response)，返回给客户端或网页 -> 客户端或网页接受语音wav文件，并播放    
-
-
-
 
 
 
