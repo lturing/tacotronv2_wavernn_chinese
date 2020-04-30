@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>generate tts</title>
+        <script src="https://libs.baidu.com/jquery/1.7.1/jquery.min.js"></script>
+        <style>
+            body {
+                width:88%;
+                margin: 0 auto;
+                height: 100vh; // stretch body to the whole page
+                display: flex; // define a flex container
+                flex-direction: column; // arrange items in column
+                justify-content: center; // align vertically center
+                text-align: center;
+                vertical-align: middle;
+                align:center;
+            }
+            div, textarea{
+                margin:0 auto;
+            }
+            button{
+                width:5%;
+                hight:2%;    
+                margin:10px;
+                align:center;
+            }
+            button, div, p, input{
+                text-align: center;
+                vertical-align: middle;
+                align:center;
+            }
+            p {
+                margin: 15px;
+            }
+        </style>
+    </head>
+    <body style="align:center;">
+        <div>
+            <br>
+            <div id='wav'>
+                <textarea rows="8" id="text" autocomplete="off" style="min-height:64px;width:90%;">数星星的工作让科学家发现了天体在宇宙里的分布和运动规律，这也是最早的天文学研究方法。那天上的星星是什么？它的物理本质是什么？起源是什么？内部结构是什么？又如何演化？最终命运又是什么？这些疑问激起了物理学家的极大兴趣。</textarea>
+                <br/>
+                <!--<button onclick="generate_tts()" id="button">合成</button> -->
+                <button id="button">合成</button>
+                <br/>
+            </div>
+        </div>
+    </body>
+    <script>
+        function update_content(res, container){
+            var container = document.getElementById('wav');
+            while(true){
+                var p = container.getElementsByTagName('p');
+                if (p.length > 0){
+                    container.removeChild(p[0]);
+                }
+                else{
+                    break;
+                 }
+            }
+        
+            var audio = document.createElement('audio');
+            audio.setAttribute('controls', '');
+            var wav = document.createElement('source');
+            wav.src = res['wav'];
+            audio.appendChild(wav);
+            var p = document.createElement('p');
+            p.appendChild(audio);
+            container.appendChild(p);
+            
+            var p = document.createElement('p');
+            container.appendChild(p);
+
+            var p = document.createElement('p');
+            p.innerText = res['pyin'];
+            container.appendChild(p);
+                
+            var p = document.createElement('p');
+            container.appendChild(p);
+
+            var img = document.createElement('img');
+            img.src = res['img'];
+            var p = document.createElement('p');
+            p.appendChild(img);
+            container.appendChild(p);
+        }
+
+        $("#button").click(function(e){
+            $("#button").attr("disabled", true);
+            document.getElementById("button").textContent = "合成中"
+            var input = document.getElementById('text').value || document.getElementById('text').placeholder;
+            input = input.trim();
+            if (input.length > 0){
+                var container = document.getElementById('wav');
+                var p = document.createElement('p');
+                container.appendChild(p);
+                $.ajax({
+                    url:    "/generate_tts",
+                    type:   "POST",
+                    dataType: "json",
+                    data:{'txt': input},
+                    success:function(res){
+                        update_content(res, container);
+                        $("#button").attr("disabled", false);
+                        document.getElementById("button").textContent = "合成"
+                    },
+                    error:function(res){
+                        $("#button").attr("disabled", false);
+                        document.getElementById("button").textContent = "合成"
+                    }
+                })
+            }
+        })
+    </script>
+</html>

@@ -5,6 +5,7 @@
 
 由于[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)中采用Location sensitive attention，对长句字的建模能力不好(漏读、重复)，尝试了[GMM attention](https://github.com/syang1993/gst-tacotron/blob/master/models/gmm_attention_wrapper.py)、[Discrete Graves Attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L113)[issue](https://github.com/mozilla/TTS/issues/346)、[Forward attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L193)，并在Inference阶段对alignments的处理，进一步提高了语音合成能力。
 
+------------------------------------
 
 ## 1 训练中文Tacotron V2
 
