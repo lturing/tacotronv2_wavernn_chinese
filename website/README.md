@@ -26,7 +26,7 @@ python run.py
 
 ## highlight
 后台以base64的格式发送图片和wav，而不是url
-![avatar](https://raw.githubusercontent.com/lturing/tacotronv2_wavernn_chinese/master/images/post_result.png)
+![avatar](/images/post_result.png)
 
 
 
