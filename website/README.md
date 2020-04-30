@@ -12,8 +12,14 @@ docker run -p 8500:8500 \
   -t --entrypoint=tensorflow_model_server tensorflow/serving \
   --port=8500\
   --model_name=tacotron_fw --model_base_path=/models/tacotron_fw &
-
 ```
+其中
+source=/home/spurs/tts/project/Tacotron-2_forward_attention/export #模型导出目录    
+target=/models/tacotron_fw #docker内的目录(模型导出目录映射到到docker内的目录)    
+--model_name=tacotron_fw #模型名称  
+--model_base_path=/models/tacotron_fw  #docker内的进一步目录      
+
+
 
 ## 启动flask
 ```
@@ -25,7 +31,7 @@ python run.py
 
 
 ## highlight
-后台以base64的格式发送图片和wav，而不是url
+* 后台以base64的格式发送图片和wav，而不是url
 ![avatar](/images/post_result.png)
 
 
