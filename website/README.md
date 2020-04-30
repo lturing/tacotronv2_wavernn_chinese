@@ -21,7 +21,7 @@ python run.py
 ```
 
 ## 页面
-![avatar](https://raw.githubusercontent.com/lturing/tacotronv2_wavernn_chinese/master/images/website.png)
+![avatar](/images/website.png)
 
 
 ## highlight
