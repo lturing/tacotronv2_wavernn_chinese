@@ -54,7 +54,8 @@
 
 ## 4 服务部署
 采用Tensorflow Serving + Docker 来部署训练好的TacotronV2语音服务，由于需要对文本进行处理，还搭建了Flask后台框架，最终的语音合成的请求过程如下：       
-客户端或页面将需要合成语音的文字通过Get或Post方式发送请求 -> Flask后台接受请求中的文本，并对其处理，按照指定的格式发送给Docker中的Tensorflow Serving服务 -> Tensorflow Serving合成语音，并将语音文件发送给Flask -> Flask收到语音文件(response)，返回给客户端或网页 -> 客户端或网页接受语音wav文件，并播放    
+请求过程：页面 -> Flask后台 -> Tensorflow serving 
+响应过程：Tensorflow serving -> Flask后台 -> 页面
 
 
 
