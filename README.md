@@ -54,10 +54,10 @@ python tacotron_synthesize.py --text '国内知名的视频弹幕网站，这里
 ```
 
 ### 1.4 改进部分
-> 由于[TacotornV2]()中采用的注意力机制是[Location sensitive attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/location_sensitive_attention.py)，对长句子的建模能力不太好，分别尝试了以下三种注意力机制：
-    * [Guassian mixture attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/gmm_attention.py)
-    * [Discretized Graves attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/graves_attention.py)
-    * [Forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py)
+> 由于[TacotornV2]()中采用的注意力机制是[Location sensitive attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/location_sensitive_attention.py)，对长句子的建模能力不太好，分别尝试了以下三种注意力机制：    
+* [Guassian mixture attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/gmm_attention.py)
+* [Discretized Graves attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/graves_attention.py)
+* [Forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py)
 
 > 由于语音合成中的音素(拼音)到声学参数(Mel频谱)是从左到右的单调递增的对应关系，特别地，在合成阶段，对(forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py#L171)中的alignments的计算过程的特殊处理，能进一步提高模型对长句子的语音合成效果，以及控制语速。
 
