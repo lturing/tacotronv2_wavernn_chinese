@@ -59,10 +59,10 @@ python tacotron_synthesize.py --text '国内知名的视频弹幕网站，这里
 * [Discretized Graves attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/graves_attention.py)
 * [Forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py)
 
-> 由于语音合成中的音素(拼音)到声学参数(Mel频谱)是从左到右的单调递增的对应关系，特别地，在合成阶段，对(forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py#L171)中的alignments的计算过程的特殊处理，能进一步提高模型对长句子的语音合成效果，以及控制语速。
+> 由于语音合成中的音素(拼音)到声学参数(Mel频谱)是从左到右的单调递增的对应关系，特别地，在合成阶段，对[forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py#L171)中的alignments的计算过程的特殊处理，能进一步提高模型对长句子的语音合成效果，以及控制语速。
 
 ## 2 speaker adaptive(说话人转换)
-[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，在finetune阶段，固定decoder层前的参数(embedding层、CHBG、encoder层等)，用少量的新
+[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，固定decoder层前的参数(embedding层、CHBG、encoder层等)，用少量的新
 数据集训练从checkpoint中恢复的模型，达到speaker adpative的目的。
 
 
