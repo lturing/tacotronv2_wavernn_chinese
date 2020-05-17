@@ -1,9 +1,9 @@
 # TacotronV2 + WaveRNN
-1. 利用开源中文语音数据集[标贝](https://www.data-baker.com/open_source.html)(女声)，训练中文[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)，实现拼音输入序列到声学特征(Mel)转换的声学模型。在GTA模式下，利用训练好的TacotronV2合成标贝语音数据集中中文对应的Mel特征，作为声码器[WaveRNN](https://github.com/fatchord/WaveRNN)的训练数据。在合成阶段，利用TactornV2和WaveRNN合成高质量、高自然度的中文语音。
-2. 从[THCHS-30](http://www.openslr.org/18/)任选一个speaker的语音数据集，finetune TacotronV2中的部分参数，实现speaker adaptive。
-3. 利用Tensorflow serving + Tornado 部署TacotronV2中文语音合成服务。   
+1. 开源中文语音数据集[标贝](https://www.data-baker.com/open_source.html)(女声)训练中文[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)，实现中文到声学特征(Mel)转换的声学模型。在GTA模式下，利用训练好的TacotronV2合成标贝语音数据集中中文对应的Mel特征，作为声码器[WaveRNN](https://github.com/fatchord/WaveRNN)的训练数据。在合成阶段，利用TactornV2和WaveRNN合成高质量、高自然度的中文语音。
+2. 从[THCHS-30](http://www.openslr.org/18/)任选一个speaker的语音数据集，微调TacotronV2中的部分参数，实现说话人转换。
+3. Tensorflow serving + Tornado 部署TacotronV2中文语音合成服务。   
 
-由于[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)中采用Location sensitive attention，对长句字的建模能力不好(漏读、重复)，尝试了[GMM attention](https://github.com/syang1993/gst-tacotron/blob/master/models/gmm_attention_wrapper.py)、[Discrete Graves Attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L113)[issue](https://github.com/mozilla/TTS/issues/346)、[Forward attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L193)，并在Inference阶段对alignments的处理，进一步提高了语音合成能力。
+由于[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)中采用Location sensitive attention，对长句字的建模能力不好(漏读、重复)，尝试了[GMM attention](https://github.com/syang1993/gst-tacotron/blob/master/models/gmm_attention_wrapper.py)、[Discrete Graves Attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L113)[issue](https://github.com/mozilla/TTS/issues/346)、[Forward attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L193)，能有效地解决对长句的建模能力，加快模型收敛速度。
 
 ------------------------------------
 
