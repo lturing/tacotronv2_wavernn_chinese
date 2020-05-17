@@ -68,7 +68,7 @@ python tacotron_synthesize.py --text '国内知名的视频弹幕网站，这里
 
 ## 3 训练WaveRNN模型
 ### 3.1 数据集准备
-> 利用训练好的TacotronV2对标贝语音数据集在GTA(global teacher alignment)模式下，生成对应的Mel特征。需要注意的如下：
+> 利用训练好的TacotronV2对标贝语音数据集在GTA(global teacher alignment)模式下，生成对应的Mel特征。需要注意的如下：    
 * TacotronV2中的mel输出的范围为[-hparmas.max_abs_value, hparams.max_abs_value]，而WaveRNN中的mel的范围[0, 1]，故需要将TacotronV2输出mel特征变为[0, 1]范围内。
 * TacotronV2中的hop_size为275，需要将WaveRNN中的voc_upsample_factors的值改为(5, 5, 11)(注上采样的比例, 或者(x, y, z)，并且x * y * z = hop_size)。
 
