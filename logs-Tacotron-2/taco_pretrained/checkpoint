@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/spurs/tts/project/Tacotron-2_forward_attention_final/logs-Tacotron-2/taco_pretrained/tacotron_model.ckpt-206500"
+all_model_checkpoint_paths: "/home/spurs/tts/project/Tacotron-2_forward_attention_final/logs-Tacotron-2/taco_pretrained/tacotron_model.ckpt-206500"
