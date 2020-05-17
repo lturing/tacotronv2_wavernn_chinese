@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+tacotron_inference_output/
+wavernn_inference_output/
+
 # C extensions
 *.so
 

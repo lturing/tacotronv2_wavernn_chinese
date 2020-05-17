@@ -122,6 +122,10 @@ def preprocess(text, tone=False):
 
     text = re.sub(r'！[！\s]+', '！', text)
     text = re.sub(r'，！+', '！', text)
+    text = re.sub('\.+', '。', text)
+    text = re.sub(',+', '，', text)
+    text = re.sub('!+', '！', text)
+    text = re.sub('\?+', '？', text)
 
     text = re.sub(r'\s+', ' ', text)
     text = text.replace('|', '') 

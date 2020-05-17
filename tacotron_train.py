@@ -1,6 +1,6 @@
 import argparse
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+#os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 from time import sleep
 

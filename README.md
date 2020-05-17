@@ -13,50 +13,88 @@
 #### 1.1.1 中文标点符号处理
 对于中文标点符号，只保留'，。？！'四种符号，其余符号按照相应规则转换到这四个符号之一。
 
-#### 1.1.2 中文到拼音转换
-利用字拼音文件和词拼音文件，实现中文到拼音转换，能有效消除多音字的干扰。具体步骤如下：       
+#### 1.1.2 中文到拼音转换[code](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/pinyin/parse_text_to_pyin.py)
+利用[字拼音文件](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/pinyin/pinyin.txt)和[词拼音文件](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/pinyin/large_pinyin.txt)，实现中文到拼音转换，能有效消除多音字的干扰。具体步骤如下：       
 1. 对于每个句子中汉字从左到右的顺序，优先从词拼音库中查找是否存在以该汉字开头的词并检查该汉字后面的汉字是否与该词匹配，若满足条件，直接从词库中获取拼音，若不满足条件，从字拼音库中获取该汉字的拼音。     
 2. 对于数字(整数、小数)、ip地址等，首先根据规则转化成文字，比如整数2345转化为二千三百四十五，再转化为拼音。
 3. 由于输入是文字转化而来的拼音序列，所以在合成阶段，允许部分或全部的拼音输入。    
 
+*注优先从词文件中寻找拼音，也会带来错误的拼音(也许先分词能解决)，所以本项目支持中文和拼音混合输入*
+
 
 ### 1.2 训练数据集预处理
-执行如下脚本，生成TacotronV2的训练数据集
-> python preprocess.py
+> 修改[hparams.py](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron_hparams.py)中标贝数据集的路径
+```python
+dataset = '/home/spurs/tts/dataset/bznsyp', #标贝数据集的根目录，其wav文件在 dataset/bznsyp下
+base_dir = '/home/spurs/tts/dataset',
+feat_out_dir = 'training_data_v1',
+tacotron_input = '/home/spurs/tts/dataset/bznsyp/training_data_v1/train.txt', 
+```
+
+> 执行如下脚本，生成TacotronV2的训练数据集
+```python
+tacotron_preprocess.py
+```
 
 ### 1.2 训练TacotronV2模型
-执行如下脚本，训练TacotronV2模型
-> python train.py --model='Tacotron-2'
+> 执行如下脚本，训练TacotronV2模型
+```python
+python tacotron_train.py
+```
 
 ### 1.3 合成语音
-修改脚本 generate_mel_by_gta_for_tested_text.py 中text，执行如下脚本，合成语音
-> python generate_mel_by_gta_for_tested_text.py
+修改脚本 tacotron_synthesize.py 中text
+```python
+python tacotron_synthesize.py
+```
+
+或命令行输入   
+```python
+python tacotron_synthesize.py --text '国内知名的视频弹幕网站，这里有最及时的动漫新番。'
+```
 
 ### 1.4 改进部分
-* 由于[TacotornV2]()中采用的注意力机制是Location sensitive attention，对长句子的建模能力不太好，分别尝试了以下三种注意力机制：
-    * 采用GMM attention(三种形式)
-    * Discretized Graves attention(GMM attention的变种)
-    * Forward attention
+> 由于[TacotornV2]()中采用的注意力机制是[Location sensitive attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/location_sensitive_attention.py)，对长句子的建模能力不太好，分别尝试了以下三种注意力机制：
+    * [Guassian mixture attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/gmm_attention.py)
+    * [Discretized Graves attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/graves_attention.py)
+    * [Forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py)
 
-> 同时，由于语音合成中的音素(拼音)到声学参数(Mel频谱)是从左到右的单调递增的对应关系，在Inference阶段，对attention中的alignments的处理能够进一步提高模型对长句子的语音合成效果，在Location sensitive attention和Forward attention中还能达到控制语速的效果。
+> 由于语音合成中的音素(拼音)到声学参数(Mel频谱)是从左到右的单调递增的对应关系，特别地，在合成阶段，对(forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py#L171)中的alignments的计算过程的特殊处理，能进一步提高模型对长句子的语音合成效果，以及控制语速。
 
-
-
-## 2 训练WaveRNN模型
-### 2.1 训练数据集准备
-利用训练好的TacotronV2对标贝语音数据集在GTA(global teacher alignment)模式下，生成对应的Mel特征。需要注意的如下：
-1. TacotronV2中的mel输出的范围为[-hparmas.max_abs_value, hparams.max_abs_value]，而WaveRNN中的mel的范围[0, 1]，故需要将TacotronV2输出mel特征变为[0, 1]范围内。
-2. TacotronV2中的hop_size为256，需要将WaveRNN中的voc_upsample_factors的值改为(4, 8, 8)(注上采样的比例, 或者(x, y, z)，并且x * y * z = hop_size)。
+## 2 speaker adaptive(说话人转换)
+[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，在finetune阶段，固定decoder层前的参数(embedding层、CHBG、encoder层等)，用少量的新
+数据集训练从checkpoint中恢复的模型，达到speaker adpative的目的。
 
 
-## 3 speaker adaptive
-参照代码[TactronV2](https://github.com/Rayhane-mamah/Tacotron-2)支持finetune，在finetune阶段，固定decoder层前的所有层的参数(embedding层、CHBG、encoder层等)，用少量的新数据集训练从checkpoint中恢复的模型，达到speaker adpative的目的。
+## 3 训练WaveRNN模型
+### 3.1 数据集准备
+> 利用训练好的TacotronV2对标贝语音数据集在GTA(global teacher alignment)模式下，生成对应的Mel特征。需要注意的如下：
+* TacotronV2中的mel输出的范围为[-hparmas.max_abs_value, hparams.max_abs_value]，而WaveRNN中的mel的范围[0, 1]，故需要将TacotronV2输出mel特征变为[0, 1]范围内。
+* TacotronV2中的hop_size为275，需要将WaveRNN中的voc_upsample_factors的值改为(5, 5, 11)(注上采样的比例, 或者(x, y, z)，并且x * y * z = hop_size)。
+
+```python
+python wavernn_preprocess.py #利用训练好的TacotronV2生成Wavernn的训练数据
+```
+
+### 3.2 模型训练
+> 训练前需要切换到pytorch　conda环境，例如：    
+```shell
+conda activate torch1.0 #切换到pytorch分支
+```
+> 训练模型
+```python
+python wavernn_train.py
+```
+
+### 3.3 模型评估
+```python
+python wavernn_gen.py --file path_to_mel_generated_by_tacotronv2 
+```
 
 ## 4 服务部署
 采用Tensorflow Serving + Docker 来部署训练好的TacotronV2语音服务，由于需要对文本进行处理，还搭建了Flask后台框架，最终的语音合成的请求过程如下：       
 请求过程：页面 -> Flask后台 -> Tensorflow serving    
 响应过程：Tensorflow serving -> Flask后台 -> 页面
-
 
 
 ## 额外参照文献

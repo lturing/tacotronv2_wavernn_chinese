@@ -1,4 +1,6 @@
 import os
+import argparse
+
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 cwd = os.getcwd()
@@ -125,6 +127,10 @@ class Synthesizer:
         return pred_mel_path, alignment_path
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--text', default='', help='text to synthesis.')   
+    args = parser.parse_args()
+
     past = time.time()
 
     synth = Synthesizer()
@@ -166,7 +172,8 @@ if __name__ == '__main__':
     #text = '在家务农的前美国国家航空航天局宇航员库珀马修·麦康纳饰接连在女儿墨菲麦肯吉·弗依饰的书房发现奇怪的重力场现象。'
 
     #text = '如果打穿地球，那么从一头到另一头h ui4发生什么？'
-
+    
+    text = args.text if args.text != '' else text 
     pyin, text = get_pyin(text)
     
     m = hashlib.md5()
