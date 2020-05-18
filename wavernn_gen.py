@@ -34,7 +34,8 @@ def gen_from_file(model: WaveRNN, load_path, save_path, batched, target, overlap
 
     batch_str = f'gen_batched_target{target}_overlap{overlap}' if batched else 'gen_NOT_BATCHED'
 
-    idx = load_path.split('/')[-1].strip().split('-')[1].strip() 
+    #idx = load_path.split('/')[-1].strip().split('-')[1].strip() 
+    idx = load_path.split('/')[-1].strip().split('.')[0]
     save_str = os.path.join(save_path, idx + '_' + batch_str + '_' + 'step={}k'.format(k) + '.wav')
 
     _ = model.generate(mel, save_str, batched, target, overlap, hp.mu_law)
