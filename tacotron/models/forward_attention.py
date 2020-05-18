@@ -169,30 +169,34 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
         pos_rec = state.pos_rec # for saving time
 
         if not self.is_training: # prevent repeat and stay too long
+            print('*' * 100)
+            print('calling the part.')
+            print('*' * 100)
 
             Tx = tf.shape(shift_alpha)[1]
             max_attentions = tf.where(tf.less_equal(max_attentions, state.max_attentions), 
                                             state.max_attentions, state.max_attentions+1)
             
-            short_thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 8
+            short_thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 5
             short_val = tf.ones_like(max_attentions) * 2 
             short_mask = tf.logical_and(tf.less(state.pos_rec, short_thres), 
                                         tf.less(short_val, max_attentions))
 
             max_attentions = tf.where(short_mask, state.max_attentions, max_attentions)
-            
+
             pos_mask = tf.equal(max_attentions, state.max_attentions)
             ones_val = tf.ones_like(pos_mask, dtype=tf.int32)
             pos_rec = tf.where(pos_mask, state.pos_rec + 1, ones_val)
-
+            
             thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 10
             pos_mask = tf.less(pos_rec, thres)
 
             max_attentions = tf.where(pos_mask, max_attentions, max_attentions+1)
             pos_rec = tf.where(pos_mask, pos_rec, ones_val)
+            
 
-            left = tf.sequence_mask(max_attentions-1, Tx)
-            right = tf.logical_not(tf.sequence_mask(max_attentions+2, Tx))
+            left = tf.sequence_mask(max_attentions-2, Tx)
+            right = tf.logical_not(tf.sequence_mask(max_attentions+3, Tx))
                 
             mask = tf.logical_not(tf.logical_or(left, right))
             paddings = tf.zeros_like(shift_alpha)
@@ -202,13 +206,14 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
             right = tf.logical_not(tf.sequence_mask(max_attentions+1, Tx))
             mask = tf.logical_not(tf.logical_or(left, right))
 
-            max_alignments_values = tf.reduce_max(alignments, axis=-1, keepdims=True)
-            max_alignments_values = tf.where(tf.equal(max_alignments_values, 
-                                                tf.zeros_like(max_alignments_values, dtype=tf.float32)),
+            max_alignments_values = tf.reduce_sum(alignments, axis=-1, keepdims=True)
+            max_alignments_values = tf.where(tf.less(max_alignments_values, 
+                                                tf.ones_like(max_alignments_values, dtype=tf.float32) * 1e-10),
                                             tf.ones_like(max_alignments_values, dtype=tf.float32), 
                                             max_alignments_values)
 
-            alignments = tf.where(mask, alignments + max_alignments_values * 6, alignments)
+            alignments = tf.where(mask, tf.zeros_like(alignments) + max_alignments_values * 2.0, alignments)
+            
 
         alignments = alignments / tf.reduce_sum(alignments, axis=-1, keepdims=True)
         expanded_alignments = tf.expand_dims(alignments, axis=1)
