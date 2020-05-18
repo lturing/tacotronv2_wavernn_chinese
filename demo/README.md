@@ -1,0 +1,1 @@
+gmm attention对标点符号建模持续时间过长，需要将训练数据集中的wav进行clip和trim然后concat

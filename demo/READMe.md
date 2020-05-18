@@ -1,1 +1,0 @@
-gmm attention对符号持续时间过长，需要将wav进行clip然后concat
