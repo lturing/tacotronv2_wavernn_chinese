@@ -35,7 +35,7 @@ tacotron_input = '/home/spurs/tts/dataset/bznsyp/training_data_v1/train.txt',
 
 > 执行如下脚本，生成TacotronV2的训练数据集
 ```python
-tacotron_preprocess.py
+python tacotron_preprocess.py
 ```
 
 ### 训练TacotronV2模型
