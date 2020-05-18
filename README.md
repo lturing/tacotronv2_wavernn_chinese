@@ -93,7 +93,7 @@ python wavernn_gen.py --file path_to_mel_generated_by_tacotronv2
 ```
 
 ## 服务部署 
-**[website](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/website)**
+**[website](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/website)**     
 采用Tensorflow Serving + Docker 来部署训练好的TacotronV2语音服务，由于需要对文本进行处理，还搭建了Flask后台框架，最终的语音合成的请求过程如下：       
 请求过程：页面 -> Flask后台 -> Tensorflow serving    
 响应过程：Tensorflow serving -> Flask后台 -> 页面
