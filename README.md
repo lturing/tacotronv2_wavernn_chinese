@@ -78,7 +78,7 @@ python wavernn_preprocess.py #利用训练好的TacotronV2生成Wavernn的训练
 ```
 
 ### Wavernn模型训练
-> 训练前需要切换到pytorch　conda环境，例如：    
+> 训练前需要切换到pytorch conda环境，例如：    
 ```shell
 conda activate torch1.0 #切换到pytorch分支
 ```
