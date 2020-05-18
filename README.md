@@ -3,7 +3,9 @@
 2. 从[THCHS-30](http://www.openslr.org/18/)任选一个speaker的语音数据集，微调TacotronV2中的部分参数，实现说话人转换。
 3. Tensorflow serving + Tornado 部署TacotronV2中文语音合成服务。   
 
-由于[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)中采用Location sensitive attention，对长句字的建模能力不好(漏读、重复)，尝试了[GMM attention](https://github.com/syang1993/gst-tacotron/blob/master/models/gmm_attention_wrapper.py)、[Discrete Graves Attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L113)[issue](https://github.com/mozilla/TTS/issues/346)、[Forward attention](https://github.com/mozilla/TTS/blob/master/layers/common_layers.py#L193)，能有效地解决对长句的建模能力，加快模型收敛速度。
+由于[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)[TacotronV2](https://github.com/mozilla/TTS)中采用Location sensitive attention，对长句字的建模能力不好(漏读、重复)，尝试了[GMM attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/gmm_attention.py)、[Discrete Graves Attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/graves_attention.py)[issue](https://github.com/mozilla/TTS/issues/346)、[Forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py)，能有效地解决对长句的建模能力，加快模型收敛速度。
+
+**[demo wav](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/demo)**
 
 ------------------------------------
 
@@ -90,7 +92,8 @@ python wavernn_train.py
 python wavernn_gen.py --file path_to_mel_generated_by_tacotronv2 
 ```
 
-## 服务部署
+## 服务部署 
+**[website](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/website)**
 采用Tensorflow Serving + Docker 来部署训练好的TacotronV2语音服务，由于需要对文本进行处理，还搭建了Flask后台框架，最终的语音合成的请求过程如下：       
 请求过程：页面 -> Flask后台 -> Tensorflow serving    
 响应过程：Tensorflow serving -> Flask后台 -> 页面
