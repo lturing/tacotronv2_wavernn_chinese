@@ -24,7 +24,7 @@
 
 
 ### TacotronV2训练数据集预处理
-> 修改[hparams.py](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron_hparams.py)中标贝数据集的路径
+> 修改[hparams.py](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron_hparams.py)中[标贝数据集](https://www.data-baker.com/open_source.html)的路径
 ```python
 dataset = '/home/spurs/tts/dataset/bznsyp', #标贝数据集的根目录，其wav文件在 dataset/bznsyp下
 base_dir = '/home/spurs/tts/dataset',
@@ -53,6 +53,9 @@ python tacotron_synthesize.py
 ```python
 python tacotron_synthesize.py --text '国内知名的视频弹幕网站，这里有最及时的动漫新番。'
 ```
+
+**[TacotronV2 pretrained model](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/logs-Tacotron-2/taco_pretrained)**
+
 
 ### 改进部分
 > 由于[TacotornV2]()中采用的注意力机制是[Location sensitive attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/location_sensitive_attention.py)，对长句子的建模能力不太好，尝试了以下注意力机制：    
@@ -90,6 +93,8 @@ python wavernn_train.py
 ```python
 python wavernn_gen.py --file path_to_mel_generated_by_tacotronv2 
 ```
+
+**[Wavernn pretrained model](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/logs_wavernn/checkpoints)**
 
 ## 服务部署 
 **[website](https://github.com/lturing/tacotronv2_wavernn_chinese/tree/master/website)**     
