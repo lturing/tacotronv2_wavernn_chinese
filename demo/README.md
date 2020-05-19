@@ -1,4 +1,4 @@
-**[语音特征解耦合](https://auspicious3000.github.io/SpeechSplit-Demo/)**
+**[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**    
 
 * 基于graves attention的TacotronV2对标点符号建模持续时间过长，需要将训练数据集中的wav进行clip和trim然后concat   
 * 基于forward attention的TacotronV2模型合成的声音听起来气息不平稳，是由对[alignments](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py#L171)计算过程的特殊处理造成的，需要进一步优化。
