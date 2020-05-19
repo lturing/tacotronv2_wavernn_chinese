@@ -5,7 +5,9 @@
 
 由于[TacotronV2](https://github.com/Rayhane-mamah/Tacotron-2)[TacotronV2](https://github.com/mozilla/TTS)中采用Location sensitive attention，对长句字的建模能力不好(漏读、重复)，尝试了[GMM attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/gmm_attention.py)、[Discrete Graves Attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/graves_attention.py)[issue](https://github.com/mozilla/TTS/issues/346)、[Forward attention](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron/models/forward_attention.py)，能有效地解决对长句的建模能力，加快模型收敛速度。
 
-**[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**
+------------------------------------
+
+**##[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**
 
 ------------------------------------
 
