@@ -7,7 +7,7 @@
 
 ------------------------------------
 
-**##[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**
+##**[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**
 
 ------------------------------------
 
