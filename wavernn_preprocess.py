@@ -15,7 +15,7 @@ from tacotron.utils.text import text_to_sequence
 import os
 from tacotron_hparams import hparams
 import shutil 
-from pinyin.parse_text_to_pyin import get_pyin
+from tacotron.pinyin.parse_text_to_pyin import get_pyin
 
 
 def padding_targets(target, r, padding_value):
