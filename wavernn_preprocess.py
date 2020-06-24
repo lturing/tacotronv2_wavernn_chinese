@@ -6,14 +6,14 @@ from datetime import datetime
 
 import numpy as np
 import tensorflow as tf
-from datasets import audio
-from infolog import log
+from tacotron.datasets import audio
+from tacotron.utils.infolog import log
 from librosa import effects
 from tacotron.models import create_model
 from tacotron.utils import plot
 from tacotron.utils.text import text_to_sequence
 import os
-from hparams import hparams
+from tacotron_hparams import hparams
 import shutil 
 from pinyin.parse_text_to_pyin import get_pyin
 
