@@ -11,7 +11,7 @@ from tacotron_hparams import hparams
 
 chars = set()
 train_input = hparams.tacotron_input if os.path.exists(hparams.tacotron_input) else './train.txt'
-with open(hparams.tacotron_input, 'r', encoding='utf-8') as f:
+with open(train_input, 'r', encoding='utf-8') as f:
     for line in f:
         words = line.strip().split('|')[-1].strip().split(' ')
         for w in words:
