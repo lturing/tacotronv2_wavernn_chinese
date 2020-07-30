@@ -10,7 +10,8 @@
 
 **tensorflow-gpu的版本为1.14.0**
 
-## 测试语音合成的效果(确保相关的库已经安装)
+## 测试语音合成的效果       
+**参照[requirements.txt](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/requirements.txt)**安装相应的库      
 ```bash
 git clone https://github.com/lturing/tacotronv2_wavernn_chinese.git
 cd tacotronv2_wavernn_chinese
