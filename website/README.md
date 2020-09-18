@@ -3,7 +3,7 @@
 1. 页面或客户端将需要合成的文字发送到Flask后台
 2. Flask后台处理并转发到运行在docker里的Tensorflow Serving
 3. Tensorflow Serving 合成语音的Mel谱，并返回给Flask
-4. Flask接受Mel谱，并将其转化为语音，返回给页面或客户端
+4. Flask接收Mel谱，并将其转化为语音，返回给页面或客户端
 
 ## 启动docker
 ```

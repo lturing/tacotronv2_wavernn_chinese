@@ -8,6 +8,19 @@
 
 ## **[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**
 
+**tensorflow-gpu的版本为1.14.0**
+
+## 测试语音合成的效果       
+**参照[requirements.txt](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/requirements.txt)**安装相应的库      
+```bash
+git clone https://github.com/lturing/tacotronv2_wavernn_chinese.git
+cd tacotronv2_wavernn_chinese
+python tacotron_synthesize.py --text '现在是凌晨零点二十七分，帮您订好上午八点的闹钟。'
+#合成的wav、attention align等在./tacotron_inference_output下
+#由于在inference阶段，模型中的dropout没有关闭，相同的输入text，合成的wav的韵律等有轻微的不同
+```
+------------------------------
+
 ## 训练TacotronV2模型
 
 ### 训练数据集预处理
