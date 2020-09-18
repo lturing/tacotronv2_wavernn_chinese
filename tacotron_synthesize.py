@@ -181,8 +181,6 @@ if __name__ == '__main__':
     #text = '这是一个人与人之间无比接近的时代，近到，拿起手机，你可以和世界上任何一个角落的人，无缝地交流，连接。这是一个人与人之间无比遥远的时代，远到，即使你身边坐满了人， 也未必有人愿意听你说一句心里话。你的孤独没人懂。这个时候，越来越多的人干脆，选择抛弃同类，转身去和人工智能谈情说爱，做朋友。'
    
     #text = '您好，麻烦您帮我拿一下我的书包。'
-    text = '您好，我这边是中邮消费这边的客服，请问有什么我可以帮助到您？'
-
     text = args.text if args.text != '' else text 
     pyin, text = get_pyin(text)
     
@@ -195,6 +193,7 @@ if __name__ == '__main__':
     pred_mel_path, alignment_path = synth.synthesize(pyin, out_dir, idx, step)
     print(text)
     print(checkpoint_path)
+    print(idx)
 
     print('last: {} seconds'.format(time.time() - past))
 

@@ -177,7 +177,7 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
             max_attentions = tf.where(tf.less_equal(max_attentions, state.max_attentions), 
                                             state.max_attentions, state.max_attentions+1)
             
-            short_thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 5
+            short_thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 3
             short_val = tf.ones_like(max_attentions) * 2 
             short_mask = tf.logical_and(tf.less(state.pos_rec, short_thres), 
                                         tf.less(short_val, max_attentions))
@@ -188,7 +188,7 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
             ones_val = tf.ones_like(pos_mask, dtype=tf.int32)
             pos_rec = tf.where(pos_mask, state.pos_rec + 1, ones_val)
             
-            thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 10
+            thres = tf.ones_like(state.pos_rec, dtype=tf.int32) * 8
             pos_mask = tf.less(pos_rec, thres)
 
             max_attentions = tf.where(pos_mask, max_attentions, max_attentions+1)
