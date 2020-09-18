@@ -228,3 +228,4 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
         
         return alignments, new_mu, context, cumulated_alignments, max_attentions, pos_rec 
 
+

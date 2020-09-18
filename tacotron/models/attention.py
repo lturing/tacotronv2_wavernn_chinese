@@ -168,7 +168,7 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
         max_attentions = tf.argmax(alignments, -1, output_type=tf.int32) # (N, Ty/r)
         pos_rec = state.pos_rec # for saving time
 
-        if not self.is_training: # prevent repeat and stay too long
+        if not self.is_training and False: # prevent repeat and stay too long
             print('*' * 100)
             print('calling the part.')
             print('*' * 100)
@@ -207,12 +207,14 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
             mask = tf.logical_not(tf.logical_or(left, right))
 
             max_alignments_values = tf.reduce_sum(alignments, axis=-1, keepdims=True)
+            '''
             max_alignments_values = tf.where(tf.less(max_alignments_values, 
                                                 tf.ones_like(max_alignments_values, dtype=tf.float32) * 1e-10),
                                             tf.ones_like(max_alignments_values, dtype=tf.float32), 
                                             max_alignments_values)
+            '''
 
-            alignments = tf.where(mask, tf.zeros_like(alignments) + max_alignments_values * 2.0, alignments)
+            alignments = tf.where(mask, tf.ones_like(alignments) * 1e-1 + max_alignments_values * 2.0, alignments)
             
 
         alignments = alignments / tf.reduce_sum(alignments, axis=-1, keepdims=True)
@@ -227,4 +229,5 @@ class ForwardLocationSensitiveAttention(BahdanauAttention):
         new_mu = tf.layers.dense(tf.concat([context, query], axis=-1), units=1, activation=tf.nn.sigmoid, use_bias=True)
         
         return alignments, new_mu, context, cumulated_alignments, max_attentions, pos_rec 
+
 

@@ -8,7 +8,8 @@ hparams = tf.contrib.training.HParams(
     dataset = '/home/spurs/tts/dataset/bznsyp',
     base_dir = '/home/spurs/tts/dataset',
     feat_out_dir = 'training_data_v1',
-    tacotron_input = '/home/spurs/tts/dataset/bznsyp/training_data_v1/train.txt',
+    #tacotron_input = '/home/spurs/tts/dataset/bznsyp/training_data_v1/train.txt',
+    tacotron_input = './train.txt',
 
 	#If you only have 1 GPU or want to use only one GPU, please set num_gpus=0 and specify the GPU idx on run. example:
 		#expample 1 GPU of index 2 (train on "/gpu2" only): CUDA_VISIBLE_DEVICES=2 python train.py --model='Tacotron' --hparams='tacotron_gpu_start_idx=2'
