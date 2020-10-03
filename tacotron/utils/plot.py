@@ -48,29 +48,29 @@ def plot_spectrogram(pred_spectrogram, path, title=None, split_title=False, targ
     if split_title:
         title = split_title_line(title)
 
-    fig = plt.figure(figsize=(20, 16))
-    # Set common labels
-    fig.text(0.5, 0.18, title, horizontalalignment='center', fontsize=16)
-
     #target spectrogram subplot
     if target_spectrogram is not None:
-        ax1 = fig.add_subplot(311)
-        ax2 = fig.add_subplot(312)
+        fig = plt.figure(figsize=(20, 16))
+        fig.text(0.5, 0.18, title, horizontalalignment='center', fontsize=16)
+        ax1 = fig.add_subplot(211)
+        ax2 = fig.add_subplot(212)
 
         if auto_aspect:
-            im = ax1.imshow(np.rot90(target_spectrogram), aspect='auto', interpolation='none')
+            im = ax1.imshow(np.rot90(target_spectrogram)[::-1, :], aspect='auto', interpolation='none', origin='lower')
         else:
-            im = ax1.imshow(np.rot90(target_spectrogram), interpolation='none')
+            im = ax1.imshow(np.rot90(target_spectrogram)[::-1, :], interpolation='none', origin='lower')
         ax1.set_title('Target Mel-Spectrogram')
         fig.colorbar(mappable=im, shrink=0.65, orientation='horizontal', ax=ax1)
         ax2.set_title('Predicted Mel-Spectrogram')
     else:
-        ax2 = fig.add_subplot(211)
+        fig = plt.figure(figsize=(20, 6))
+        fig.text(0.5, 0.95, title, horizontalalignment='center', fontsize=16)
+        ax2 = fig.add_subplot()
 
     if auto_aspect:
-        im = ax2.imshow(np.rot90(pred_spectrogram), aspect='auto', interpolation='none')
+        im = ax2.imshow(np.rot90(pred_spectrogram)[::-1, :], aspect='auto', interpolation='none', origin='lower')
     else:
-        im = ax2.imshow(np.rot90(pred_spectrogram), interpolation='none')
+        im = ax2.imshow(np.rot90(pred_spectrogram)[::-1, :], interpolation='none', origin='lower')
     fig.colorbar(mappable=im, shrink=0.65, orientation='horizontal', ax=ax2)
 
     plt.tight_layout()
