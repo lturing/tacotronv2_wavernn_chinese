@@ -5,10 +5,7 @@ __pycache__/
 
 tacotron_inference_output/
 wavernn_inference_output/
-logs-Tacotron-2/D8/wav_plot/*
-D8/
-logs-Tacotron-2/D8.zip
-
+log_bak
 # C extensions
 *.so
 
