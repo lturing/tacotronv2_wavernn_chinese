@@ -10,7 +10,8 @@ import os
 from tacotron_hparams import hparams 
 
 chars = set()
-train_input = hparams.tacotron_input if os.path.exists(hparams.tacotron_input) else './train.txt'
+train_input = hparams.pretrained_tacotron_input
+assert os.path.exists(train_input), f"pretrained model input: train_input not exist"
 with open(train_input, 'r', encoding='utf-8') as f:
     for line in f:
         words = line.strip().split('|')[-1].strip().split(' ')

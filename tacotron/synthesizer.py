@@ -3,7 +3,6 @@ import wave
 from datetime import datetime
 
 import numpy as np
-import sounddevice as sd
 import tensorflow as tf
 from tacotron.datasets import audio
 from tacotron.utils.infolog import log

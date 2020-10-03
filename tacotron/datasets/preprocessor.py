@@ -6,48 +6,25 @@ import numpy as np
 from tacotron.datasets import audio
 import sys
 from tacotron.pinyin.parse_text_to_pyin import get_pyin
-
+import glob 
+import re 
 
 def build_from_path_v1(hparams, input_dirs, out_dir, n_jobs=12, tqdm=lambda x: x):
-    """
-    Preprocesses the speech dataset from a gven input path to given output directories
 
-    Args:
-        - hparams: hyper parameters
-        - input_dir: input directory that contains the files to prerocess
-        - mel_dir: output directory of the preprocessed speech mel-spectrogram dataset
-        - linear_dir: output directory of the preprocessed speech linear-spectrogram dataset
-        - wav_dir: output directory of the preprocessed speech audio dataset
-        - n_jobs: Optional, number of worker process to parallelize across
-        - tqdm: Optional, provides a nice progress bar
-
-    Returns:
-        - A list of tuple describing the train examples. this should be written to train.txt
-    """
-
-    # We use ProcessPoolExecutor to parallelize across processes, this is just for
-    # optimization purposes and it can be omited
     executor = ProcessPoolExecutor(max_workers=n_jobs)
     futures = []
-    wav_path = '/home/spurs/tts/dataset/bznsyp/bznsyp'
-    input_file = os.path.join(input_dirs[0], '000001-010000.txt')
-    with open(input_file, 'r', encoding='utf-8') as f:
-        flag = 0 
-        for line in f:
-            if flag == 0:
-                line = line.strip().split('\t')
-                basename = line[0].strip()
-                text = line[1].strip()
-                pyin, txt = get_pyin(text)
+    wav_path = os.path.join(input_dirs, 'wav', '*.wav')
+    for wav in glob.glob(wav_path):
+        trn = wav + '.txt'
+        if os.path.exists(trn):
+            text = open(trn, 'r', encoding='utf-8').readline().strip()
+            text = re.sub(r'\s+', '', text)
+            pyin, txt = get_pyin(text)
+            basename = os.path.basename(wav).split('.')[0]
+            futures.append(executor.submit(partial(_process_utterance_v1, out_dir, basename, wav, txt, pyin, hparams)))
 
-                wav = os.path.join(wav_path, basename + '.wav')
-                futures.append(executor.submit(partial(_process_utterance_v1, out_dir, basename, wav, txt, pyin, hparams)))
-
-                flag = 1
-            else:
-                flag = 0 
-            
     return [future.result() for future in tqdm(futures) if future.result() is not None]
+
 
 def _process_utterance_v1(out_dir, index, wav_path, text, pyin, hparams):
 
@@ -112,10 +89,11 @@ def _process_utterance_v1(out_dir, index, wav_path, text, pyin, hparams):
     time_steps = len(out)
 
     # Write the spectrogram and audio to disk
-    audio_filename = 'audio-{}.npy'.format(index)
-    mel_filename = 'mel-{}.npy'.format(index)
-    np.save(os.path.join(out_dir, audio_filename), out.astype(out_dtype), allow_pickle=False)
-    np.save(os.path.join(out_dir, mel_filename), mel_spectrogram.T, allow_pickle=False)
+    audio_filename = os.path.join(out_dir, 'audio-{}.npy'.format(index))
+    mel_filename = os.path.join(out_dir, 'mel-{}.npy'.format(index))
+    
+    np.save(audio_filename, out.astype(out_dtype), allow_pickle=False)
+    np.save(mel_filename, mel_spectrogram.T, allow_pickle=False)
 
     # Return a tuple describing this training example
     return (audio_filename, mel_filename, time_steps, mel_frames, text, pyin)

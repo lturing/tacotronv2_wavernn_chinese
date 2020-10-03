@@ -50,8 +50,8 @@ def plot_spectrogram(pred_spectrogram, path, title=None, split_title=False, targ
 
     #target spectrogram subplot
     if target_spectrogram is not None:
-        fig = plt.figure(figsize=(20, 16))
-        fig.text(0.5, 0.18, title, horizontalalignment='center', fontsize=16)
+        fig = plt.figure(figsize=(20, 10))
+        fig.text(0.5, 0.95, title, horizontalalignment='center', fontsize=16)
         ax1 = fig.add_subplot(211)
         ax2 = fig.add_subplot(212)
 
@@ -60,10 +60,10 @@ def plot_spectrogram(pred_spectrogram, path, title=None, split_title=False, targ
         else:
             im = ax1.imshow(np.rot90(target_spectrogram)[::-1, :], interpolation='none', origin='lower')
         ax1.set_title('Target Mel-Spectrogram')
-        fig.colorbar(mappable=im, shrink=0.65, orientation='horizontal', ax=ax1)
+        #fig.colorbar(mappable=im, shrink=0.65, orientation='horizontal', ax=ax1)
         ax2.set_title('Predicted Mel-Spectrogram')
     else:
-        fig = plt.figure(figsize=(20, 6))
+        fig = plt.figure(figsize=(20, 7))
         fig.text(0.5, 0.95, title, horizontalalignment='center', fontsize=16)
         ax2 = fig.add_subplot()
 

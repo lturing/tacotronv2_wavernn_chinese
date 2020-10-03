@@ -260,12 +260,7 @@ class Tacotron():
         hp = self._hparams
 
         with tf.variable_scope('optimizer') as scope:
-            if hp.tacotron_decay_learning_rate:
-                self.decay_steps = hp.tacotron_decay_steps
-                self.decay_rate = hp.tacotron_decay_rate
-                self.learning_rate = self._learning_rate_decay(hp.tacotron_initial_learning_rate, global_step)
-            else:
-                self.learning_rate = tf.convert_to_tensor(hp.tacotron_initial_learning_rate)
+            self.learning_rate = tf.convert_to_tensor(hp.tacotron_initial_learning_rate)
 
             optimizer = tf.train.AdamOptimizer(self.learning_rate, hp.tacotron_adam_beta1,
                 hp.tacotron_adam_beta2, hp.tacotron_adam_epsilon)
@@ -285,30 +280,3 @@ class Tacotron():
                 self.optimize = optimizer.apply_gradients(zip(clipped_gradients, variables),
                     global_step=global_step)
 
-
-    def _learning_rate_decay(self, init_lr, global_step):
-        #################################################################
-        # Narrow Exponential Decay:
-
-        # Phase 1: lr = 1e-3
-        # We only start learning rate decay after 50k steps
-
-        # Phase 2: lr in ]1e-5, 1e-3[
-        # decay reach minimal value at step 310k
-
-        # Phase 3: lr = 1e-5
-        # clip by minimal learning rate value (step > 310k)
-        #################################################################
-        hp = self._hparams
-
-        #Compute natural exponential decay
-        lr = tf.train.exponential_decay(init_lr, 
-            global_step - hp.tacotron_start_decay, #lr = 1e-3 at step 50k
-            self.decay_steps, 
-            self.decay_rate, #lr = 1e-5 around step 310k
-            name='lr_exponential_decay')
-
-
-        #clip learning rate by max and min values (initial and final values)
-        return tf.minimum(tf.maximum(lr, hp.tacotron_final_learning_rate), init_lr)
-        

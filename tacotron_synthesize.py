@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
     synth = Synthesizer()
 
-    ckpt_path = os.path.join(cwd, 'logs-Tacotron-2/taco_pretrained')
+    ckpt_path = f'logs-Tacotron-2/{hparams.dataset}/taco_pretrained'
     checkpoint_path = tf.train.get_checkpoint_state(ckpt_path).model_checkpoint_path
 
     synth.load(checkpoint_path, hparams)

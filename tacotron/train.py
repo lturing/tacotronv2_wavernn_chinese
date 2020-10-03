@@ -89,7 +89,7 @@ def train(log_dir, args, hparams):
     os.makedirs(wav_plot, exist_ok=True)
 
     checkpoint_path = os.path.join(save_dir, 'tacotron_model.ckpt')
-    input_path = os.path.join(args.data_dir, args.tacotron_input)
+    input_path = hparams.tacotron_input
 
     log('Checkpoint path: {}'.format(checkpoint_path))
     log('Loading training data from: {}'.format(input_path))
@@ -107,18 +107,6 @@ def train(log_dir, args, hparams):
     #Set up model:
     global_step = tf.Variable(0, name='global_step', trainable=False)
     model, stats = model_train_mode(args, feeder, hparams, global_step)
-
-    #Embeddings metadata
-    char_embedding_meta = os.path.join(meta_folder, 'CharacterEmbeddings.tsv')
-    if not os.path.isfile(char_embedding_meta):
-        with open(char_embedding_meta, 'w', encoding='utf-8') as f:
-            for symbol in symbols:
-                if symbol == ' ':
-                    symbol = '\\s' #For visual purposes, swap space with \s
-
-                f.write('{}\n'.format(symbol))
-
-    char_embedding_meta = char_embedding_meta.replace(log_dir, '..')
 
     #Book keeping
     step = 0
@@ -139,29 +127,16 @@ def train(log_dir, args, hparams):
     with tf.Session() as sess: #config=config) as sess:
         try:
             summary_writer = tf.summary.FileWriter(tensorboard_dir, sess.graph)
-
             sess.run(tf.global_variables_initializer())
-
+            
             #saved model restoring
-            if args.restore:
-                # Restore saved model if the user requested it, default = True
-                try:
-                    checkpoint_state = tf.train.get_checkpoint_state(save_dir)
+            try:
+                saver.restore(sess, hparams.pretrained_model_checkpoint_path)
+                initial_global_step = global_step.assign(0)
+                sess.run(initial_global_step)
 
-                    if (checkpoint_state and checkpoint_state.model_checkpoint_path):
-                        saver.restore(sess, checkpoint_state.model_checkpoint_path)
-                        #initial_global_step = global_step.assign(0)
-                        #sess.run(initial_global_step)
-
-                    else:
-                        log('No model to load at {}'.format(save_dir), slack=True)
-                        saver.save(sess, checkpoint_path, global_step=global_step)
-
-                except tf.errors.OutOfRangeError as e:
-                    log('Cannot restore checkpoint: {}'.format(e), slack=True)
-            else:
-                log('Starting new training!', slack=True)
-                saver.save(sess, checkpoint_path, global_step=global_step)
+            except tf.errors.OutOfRangeError as e:
+                assert False, e 
 
             #initializing feeder
             feeder.start_threads(sess)
@@ -216,15 +191,6 @@ def train(log_dir, args, hparams):
                     print(', '.join(map(str, input_seq.tolist())))
 
                     log('Input at step {}: {}'.format(step, sequence_to_text(input_seq)))
-
-                if step % args.embedding_interval == 0 or step == args.tacotron_train_steps or step == 1:
-                    #Get current checkpoint state
-                    checkpoint_state = tf.train.get_checkpoint_state(save_dir)
-
-                    #Update Projector
-                    log('\nSaving Model Character Embeddings visualization..')
-                    add_embedding_stats(summary_writer, [model.embedding_table.name], [char_embedding_meta], checkpoint_state.model_checkpoint_path)
-                    log('Tacotron Character embeddings have been updated on tensorboard!')
 
             log('Tacotron training complete after {} global steps!'.format(args.tacotron_train_steps), slack=True)
             return save_dir

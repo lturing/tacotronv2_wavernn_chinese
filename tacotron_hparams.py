@@ -5,13 +5,28 @@ import tensorflow as tf
 hparams = tf.contrib.training.HParams(
 	# Comma-separated list of cleaners to run on text prior to training and eval. For non-English
 	# text, you may want to use "basic_cleaners" or "transliteration_cleaners".
-    dataset = '/home/spurs/tts/dataset/bznsyp',
-    base_dir = '/home/spurs/tts/dataset',
-    feat_out_dir = 'training_data_v1',
-    #tacotron_input = '/home/spurs/tts/dataset/bznsyp/training_data_v1/train.txt',
-    tacotron_input = './train.txt',
+    dataset = 'D8',
+    feat_out_dir = 'training_data',
+    tacotron_input = 'D8_train.txt',
 
-	#If you only have 1 GPU or want to use only one GPU, please set num_gpus=0 and specify the GPU idx on run. example:
+    tacotron_fine_tuning = True, 
+    pretrained_model_checkpoint_path = 'logs-Tacotron-2/taco_pretrained/tacotron_model.ckpt-206500',
+    pretrained_tacotron_input = 'biaobei_train.txt',
+	
+    tacotron_initial_learning_rate = 1e-3, #starting learning rate
+
+    #Limits
+	fmin = 55, #Set this to 55 if your speaker is male! if female, 95 should help taking off noise. (To test depending on dataset. Pitch info: male~[65, 260], female~[100, 525])
+	fmax = 7600, #To be increased/reduced depending on data.
+
+    #M-AILABS (and other datasets) trim params (there parameters are usually correct for any data, but definitely must be tuned for specific speakers)
+	trim_silence = True, #Whether to clip silence in Audio (at beginning and end of audio only, not the middle)
+	trim_fft_size = 2048, #Trimming window size
+	trim_hop_size = 512, #Trimmin hop length
+	trim_top_db = 22, #Trimming db difference from reference db (smaller==harder trim.)
+
+
+    #If you only have 1 GPU or want to use only one GPU, please set num_gpus=0 and specify the GPU idx on run. example:
 		#expample 1 GPU of index 2 (train on "/gpu2" only): CUDA_VISIBLE_DEVICES=2 python train.py --model='Tacotron' --hparams='tacotron_gpu_start_idx=2'
 	#If you want to train on multiple GPUs, simply specify the number of GPUs available, and the idx of the first GPU to use. example:
 		#example 4 GPUs starting from index 0 (train on "/gpu0"->"/gpu3"): python train.py --model='Tacotron' --hparams='tacotron_num_gpus=4, tacotron_gpu_start_idx=0'
@@ -86,12 +101,9 @@ hparams = tf.contrib.training.HParams(
 	frame_shift_ms = None, #Can replace hop_size parameter. (Recommended: 12.5)
 	magnitude_power = 2., #The power of the spectrogram magnitude (1. for energy, 2. for power)
 
-	#M-AILABS (and other datasets) trim params (there parameters are usually correct for any data, but definitely must be tuned for specific speakers)
-	trim_silence = True, #Whether to clip silence in Audio (at beginning and end of audio only, not the middle)
-	trim_fft_size = 2048, #Trimming window size
-	trim_hop_size = 512, #Trimmin hop length
-	trim_top_db = 25, #Trimming db difference from reference db (smaller==harder trim.)
-
+    min_level_db = -100,
+	ref_level_db = 20,
+    
 	#Mel and Linear spectrograms normalization/scaling and clipping
 	signal_normalization = True, #Whether to normalize mel spectrograms to some predefined range (following below parameters)
 	allow_clipping_in_normalization = True, #Only relevant if mel_normalization = True
@@ -107,11 +119,6 @@ hparams = tf.contrib.training.HParams(
 	preemphasize = True, #whether to apply filter
 	preemphasis = 0.97, #filter coefficient.
 
-	#Limits
-	min_level_db = -100,
-	ref_level_db = 20,
-	fmin = 95, #Set this to 55 if your speaker is male! if female, 95 should help taking off noise. (To test depending on dataset. Pitch info: male~[65, 260], female~[100, 525])
-	fmax = 7600, #To be increased/reduced depending on data.
 
 	#Griffin Lim
 	power = 1.5, #Only used in G&L inversion, usually values between 1.2 and 1.5 are a good choice.
@@ -195,14 +202,6 @@ hparams = tf.contrib.training.HParams(
 	tacotron_test_size = 0.05, #% of data to keep as test data, if None, tacotron_test_batches must be not None. (5% is enough to have a good idea about overfit)
 	tacotron_test_batches = None, #number of test batches.
 
-	#Learning rate schedule
-	tacotron_decay_learning_rate = True, #boolean, determines if the learning rate will follow an exponential decay
-	tacotron_start_decay = 66000, #Step at which learning decay starts
-	tacotron_decay_steps = 20000, #Determines the learning rate decay slope (UNDER TEST)
-	tacotron_decay_rate = 0.5, #learning rate decay rate (UNDER TEST)
-	tacotron_initial_learning_rate = 1e-3, #starting learning rate
-	tacotron_final_learning_rate = 1e-5, #minimal learning rate
-
 	#Optimization parameters
 	tacotron_adam_beta1 = 0.9, #AdamOptimizer beta1 parameter
 	tacotron_adam_beta2 = 0.999, #AdamOptimizer beta2 parameter
@@ -233,7 +232,7 @@ hparams = tf.contrib.training.HParams(
 	tacotron_teacher_forcing_decay_alpha = None, #teacher forcing ratio decay rate. Defines the final tfr as a ratio of initial tfr. Relevant if mode='scheduled'
 
 	#Speaker adaptation parameters
-	tacotron_fine_tuning = False, #Set to True to freeze encoder and only keep training pretrained decoder. Used for speaker adaptation with small data.
+	#tacotron_fine_tuning = False, #Set to True to freeze encoder and only keep training pretrained decoder. Used for speaker adaptation with small data.
 	###########################################################################################################################################
 
 	)
