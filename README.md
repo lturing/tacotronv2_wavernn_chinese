@@ -1,7 +1,9 @@
-# TacotronV2 利用少量说话人的数据finetune预训练的Tacotron模型
+# 利用指定说话人的少量数据微调预训练的Tacotron模型
+---------------------------
 **update at 2020-10-3**
+----------------------------
 
-> 由于master分支中采用开源语音数据集标贝(女声)，得到预训练TacotronV2模型，为了验证模型能够在少量说话人的音频数据以及对应的文本，微调预训练模型，特地从开源语音数据集thchs30中选择了D8(男声)，一共250句。下面的示例是根据D8来演示的，可以将D8改为自己的数据集。由于thchs30中所有的wav对应的文本中，没有标点符号，本人手动标注添加
+> 由于master分支中采用开源语音数据集标贝(女声)，得到预训练TacotronV2模型，为了验证模型能够在指定说话人的少量音频以及对应的文本等数据下，微调预训练模型，特地从开源语音数据集thchs30中选择了D8(男声)，一共250句。下面的示例是根据D8来演示的，可以将D8改为自己的数据集。由于thchs30中所有的wav对应的文本中，没有标点符号，本人手动标注添加
 
 ## **[demo page](https://lturing.github.io/tacotronv2_wavernn_chinese/)**
 
@@ -9,7 +11,7 @@
 **参照[requirements.txt](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/requirements.txt)**安装相应的库 
 
 ## 测试(finetune)效果语音合成的效果  
-> 以开源语音数据集thchs30中的说话人D8为例，finetune master分支中预训练的tacotron模型
+> 以开源语音数据集thchs30中的说话人D8为例，微调 master分支中预训练的tacotron模型
 
 ```bash
 git clone https://github.com/lturing/tacotronv2_wavernn_chinese.git
