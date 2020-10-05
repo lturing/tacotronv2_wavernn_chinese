@@ -26,7 +26,7 @@ python tacotron_synthesize.py --text '现在是凌晨零点二十七分，帮您
 
 
 ### TacotronV2训练数据集预处理
-> 修改[hparams.py](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/master/tacotron_hparams.py)中[标贝数据集](https://www.data-baker.com/open_source.html)的路径
+> 注意[hparams.py](https://github.com/lturing/tacotronv2_wavernn_chinese/blob/adaptive/tacotron_hparams.py)中部分参数
 ```python
 dataset = 'D8',
 feat_out_dir = 'training_data',
@@ -57,6 +57,7 @@ trim_top_db 去掉音频首尾的静音部分，根据数据集，自行调整(�
 
 > 执行如下脚本，生成TacotronV2的训练数据集(说话人D8)
 ```python
+unzip D8.zip # 解压D8的原始数据(wav以及对应的文本)
 python tacotron_preprocess.py
 ```
 
