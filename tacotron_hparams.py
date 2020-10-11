@@ -16,7 +16,8 @@ hparams = tf.contrib.training.HParams(
     tacotron_initial_learning_rate = 1e-3, #starting learning rate
 
     #Limits
-	fmin = 55, #Set this to 55 if your speaker is male! if female, 95 should help taking off noise. (To test depending on dataset. Pitch info: male~[65, 260], female~[100, 525])
+    fmin = 55, #Set this to 55 if your speaker is male! if female, 95 should help taking off noise. (To test depending on dataset. Pitch info: male~[65, 260], female~[100, 525])
+    #fmin = 95,
 	fmax = 7600, #To be increased/reduced depending on data.
 
     #M-AILABS (and other datasets) trim params (there parameters are usually correct for any data, but definitely must be tuned for specific speakers)
