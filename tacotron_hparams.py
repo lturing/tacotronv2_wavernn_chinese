@@ -155,7 +155,7 @@ hparams = tf.contrib.training.HParams(
 	prenet_layers = [256, 256], #number of layers and number of units of prenet
 	decoder_layers = 2, #number of decoder lstm layers
 	decoder_lstm_units = 256, #number of decoder lstm units on each layer
-	max_iters = 40000, #Max decoder steps during inference (Just for safety from infinite loop cases)
+	max_iters = 2000, #Max decoder steps during inference (Just for safety from infinite loop cases)
 
 	#Residual postnet
 	postnet_num_layers = 5, #number of postnet convolutional layers

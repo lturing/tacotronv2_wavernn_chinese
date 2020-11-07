@@ -74,7 +74,7 @@ if __name__ == "__main__":
         args.samples = hp.voc_gen_at_checkpoint
 
     batched = args.batched 
-    batched = True
+    batched = False
 
     samples = args.samples
     target = args.target
