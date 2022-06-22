@@ -1,7 +1,7 @@
 tensorflow==1.14.0
 requests==2.22.0
 Flask==1.1.1
-numpy==1.18.1
+numpy==1.22.0
 grpcio==1.27.2
 matplotlib==3.1.2
 inflect==4.1.0
